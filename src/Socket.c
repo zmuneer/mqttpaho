@@ -283,7 +283,7 @@ int Socket_addSocket(SOCKET newSd)
 	int rc = 0;
 
 	FUNC_ENTRY;
-	Thread_lock_mutex(socket_mutex);
+	Paho_thread_lock_mutex(socket_mutex);
 	mod_s.nfds++;
 	if (mod_s.fds_read)
 		mod_s.fds_read = realloc(mod_s.fds_read, mod_s.nfds * sizeof(mod_s.fds_read[0]));
@@ -323,7 +323,7 @@ int Socket_addSocket(SOCKET newSd)
 		Log(LOG_ERROR, -1, "addSocket: setnonblocking");
 
 exit:
-	Thread_unlock_mutex(socket_mutex);
+	Paho_thread_unlock_mutex(socket_mutex);
 	FUNC_EXIT_RC(rc);
 	return rc;
 }
@@ -397,7 +397,7 @@ SOCKET Socket_getReadySocket(int more_work, int timeout, mutex_type mutex, int* 
 	int timeout_ms = 1000;
 
 	FUNC_ENTRY;
-	Thread_lock_mutex(mutex);
+	Paho_thread_lock_mutex(mutex);
 	if (mod_s.clientsds->count == 0)
 		goto exit;
 		
@@ -436,9 +436,9 @@ SOCKET Socket_getReadySocket(int more_work, int timeout, mutex_type mutex, int* 
 			goto exit; /* no work to do */
 		}
 		/* Prevent performance issue by unlocking the socket_mutex while waiting for a ready socket. */
-		Thread_unlock_mutex(mutex);
+		Paho_thread_unlock_mutex(mutex);
 		*rc = select(maxfdp1_saved, &(mod_s.rset), &pwset, NULL, &timeout_tv);
-		Thread_lock_mutex(mutex);
+		Paho_thread_lock_mutex(mutex);
 		if (*rc == SOCKET_ERROR)
 		{
 			Socket_error("read select", 0);
@@ -486,7 +486,7 @@ SOCKET Socket_getReadySocket(int more_work, int timeout, mutex_type mutex, int* 
 		ListNextElement(mod_s.clientsds, &mod_s.cur_clientsds);
 	}
 exit:
-	Thread_unlock_mutex(mutex);
+	Paho_thread_unlock_mutex(mutex);
 	FUNC_EXIT_RC(sock);
 	return sock;
 } /* end getReadySocket */
@@ -506,7 +506,7 @@ SOCKET Socket_getReadySocket(int more_work, int timeout, mutex_type mutex, int* 
 	int timeout_ms = 1000;
 
 	FUNC_ENTRY;
-	Thread_lock_mutex(mutex);
+	Paho_thread_lock_mutex(mutex);
 	if (mod_s.nfds == 0 && mod_s.saved.nfds == 0)
 		goto exit;
 
@@ -579,9 +579,9 @@ SOCKET Socket_getReadySocket(int more_work, int timeout, mutex_type mutex, int* 
 		}
 
 		/* Prevent performance issue by unlocking the socket_mutex while waiting for a ready socket. */
-		Thread_unlock_mutex(mutex);
+		Paho_thread_unlock_mutex(mutex);
 		*rc = poll(mod_s.saved.fds_read, mod_s.saved.nfds, timeout_ms);
-		Thread_lock_mutex(mutex);
+		Paho_thread_lock_mutex(mutex);
 		if (*rc == SOCKET_ERROR)
 		{
 			Socket_error("poll", 0);
@@ -613,7 +613,7 @@ SOCKET Socket_getReadySocket(int more_work, int timeout, mutex_type mutex, int* 
 		mod_s.saved.cur_fd = (mod_s.saved.cur_fd == mod_s.saved.nfds - 1) ? -1 : mod_s.saved.cur_fd + 1;
 	}
 exit:
-	Thread_unlock_mutex(mutex);
+	Paho_thread_unlock_mutex(mutex);
 	FUNC_EXIT_RC(sock);
 	return sock;
 } /* end getReadySocket */
@@ -978,7 +978,7 @@ int Socket_close(SOCKET socket)
 	int rc = 0;
 
 	FUNC_ENTRY;
-	Thread_lock_mutex(socket_mutex);
+	Paho_thread_lock_mutex(socket_mutex);
 	Socket_close_only(socket);
 	Socket_abortWrite(socket);
 	SocketBuffer_cleanup(socket);
@@ -1046,7 +1046,7 @@ int Socket_close(SOCKET socket)
 	else
 		Log(LOG_ERROR, -1, "Failed to remove socket %d", socket);
 exit:
-	Thread_unlock_mutex(socket_mutex);
+	Paho_thread_unlock_mutex(socket_mutex);
 	FUNC_EXIT_RC(rc);
 	return rc;
 }
@@ -1267,9 +1267,9 @@ int Socket_new(const char* addr, size_t addr_len, int port, SOCKET* sock)
 							goto exit;
 						}
 						*pnewSd = *sock;
-						Thread_lock_mutex(socket_mutex);
+						Paho_thread_lock_mutex(socket_mutex);
 						result = ListAppend(mod_s.connect_pending, pnewSd, sizeof(SOCKET));
-						Thread_unlock_mutex(socket_mutex);
+						Paho_thread_unlock_mutex(socket_mutex);
 						if (!result)
 						{
 							free(pnewSd);
@@ -1495,9 +1495,9 @@ int Socket_continueWrites(SOCKET* sock, mutex_type mutex)
 
 			if (writecomplete)
 			{
-				Thread_unlock_mutex(mutex);
+				Paho_thread_unlock_mutex(mutex);
 				(*writecomplete)(socket, rc);
-				Thread_lock_mutex(mutex);
+				Paho_thread_lock_mutex(mutex);
 			}
 		}
 		else
