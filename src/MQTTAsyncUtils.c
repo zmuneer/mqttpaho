@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009, 2023 IBM Corp., Ian Craggs and others
+ * Copyright (c) 2009, 2024 IBM Corp., Ian Craggs and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
@@ -36,6 +36,11 @@
 #include "OsWrapper.h"
 #include "WebSocket.h"
 #include "Proxy.h"
+
+#if defined(OPENSSL) && defined(LIBRESSL_VERSION_NUMBER)
+	#include <openssl/err.h>
+#endif
+
 
 static int clientSockCompare(void* a, void* b);
 static int MQTTAsync_checkConn(MQTTAsync_command* command, MQTTAsyncs* client, int was_connected);
@@ -1881,7 +1886,7 @@ thread_return_type WINAPI MQTTAsync_sendThread(void* n)
 	MQTTAsync_unlock_mutex(mqttasync_mutex);
 
 #if defined(OPENSSL)
-#if OPENSSL_VERSION_NUMBER < 0x1010000fL
+#if ((OPENSSL_VERSION_NUMBER < 0x1010000fL) || defined(LIBRESSL_VERSION_NUMBER))
 	ERR_remove_state(0);
 #else
 	OPENSSL_thread_stop();
@@ -2390,7 +2395,7 @@ thread_return_type WINAPI MQTTAsync_receiveThread(void* n)
 #endif
 
 #if defined(OPENSSL)
-#if OPENSSL_VERSION_NUMBER < 0x1010000fL
+#if ((OPENSSL_VERSION_NUMBER < 0x1010000fL) || defined(LIBRESSL_VERSION_NUMBER))
 	ERR_remove_state(0);
 #else
 	OPENSSL_thread_stop();
