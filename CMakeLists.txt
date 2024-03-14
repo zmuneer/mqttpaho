@@ -81,7 +81,7 @@ if(NOT PAHO_BUILD_SHARED AND NOT PAHO_BUILD_STATIC)
   message(FATAL_ERROR "You must set either PAHO_BUILD_SHARED, PAHO_BUILD_STATIC, or both")
 endif()
 
-if(PAHO_BUILD_SAMPLES AND NOT PAHO_WITH_SSL)
+if(PAHO_BUILD_SAMPLES AND NOT (PAHO_WITH_SSL OR PAHO_WITH_LIBRESSL))
   message(WARNING "You must build with SSL to build the full set of samples")
 endif()
 
