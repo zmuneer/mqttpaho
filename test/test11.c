@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2009, 2018 IBM Corp.
+ * Copyright (c) 2009, 2024 IBM Corp.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
@@ -2091,7 +2091,7 @@ void trace_callback(enum MQTTASYNC_TRACE_LEVELS level, char* message)
 int main(int argc, char** argv)
 {
 	int rc = -1;
- 	int (*tests[])() = {NULL,
+ 	int (*tests[])(struct Options) = {NULL,
  		test_client_topic_aliases,
 		test_server_topic_aliases,
 		test_subscription_ids,
