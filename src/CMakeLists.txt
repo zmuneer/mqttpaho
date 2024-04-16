@@ -1,5 +1,5 @@
 #*******************************************************************************
-#  Copyright (c) 2015, 2023 logi.cals GmbH, Frank Pagliughi <fpagliughi@mindspring.com> and others
+#  Copyright (c) 2015, 2024 logi.cals GmbH, Frank Pagliughi <fpagliughi@mindspring.com> and others
 #
 #  All rights reserved. This program and the accompanying materials
 #  are made available under the terms of the Eclipse Public License v2.0
@@ -56,7 +56,7 @@ if(NOT PAHO_HIGH_PERFORMANCE)
 endif()
 
 if(WIN32)
-  set(LIBS_SYSTEM ws2_32 crypt32 RpcRT4)
+  set(LIBS_SYSTEM ws2_32 crypt32 RpcRT4 Iphlpapi)
 elseif(UNIX)
   if(CMAKE_SYSTEM_NAME MATCHES "Linux")
     set(LIBS_SYSTEM c dl pthread rt)
