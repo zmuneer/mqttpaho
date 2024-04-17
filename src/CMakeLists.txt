@@ -247,7 +247,7 @@ if(PAHO_WITH_SSL OR PAHO_WITH_LIBRESSL)
     ## common compilation for libpaho-mqtt3cs and libpaho-mqtt3as
     ## Note: SSL libraries must be recompiled due to ifdefs
     add_library(common_ssl_obj OBJECT ${common_src})
-    target_include_directories(common_ssl_obj PUBLIC ${OPENSSL_INCLUDE_DIR})
+    target_include_directories(common_ssl_obj PUBLIC ${SSL_INCLUDE_DIR})
 
     set_property(TARGET common_ssl_obj PROPERTY POSITION_INDEPENDENT_CODE ON)
     target_compile_definitions(common_ssl_obj PRIVATE OPENSSL=1 PAHO_MQTT_EXPORTS=1)
@@ -315,7 +315,7 @@ if(PAHO_WITH_SSL OR PAHO_WITH_LIBRESSL)
     ## common compilation for libpaho-mqtt3cs and libpaho-mqtt3as
     ## Note: SSL libraries must be recompiled due ifdefs
     add_library(common_ssl_obj_static OBJECT ${common_src})
-    target_include_directories(common_ssl_obj_static PUBLIC ${OPENSSL_INCLUDE_DIR})
+    target_include_directories(common_ssl_obj_static PUBLIC ${SSL_INCLUDE_DIR})
 
     set_property(TARGET common_ssl_obj_static PROPERTY POSITION_INDEPENDENT_CODE ON)
     target_compile_definitions(common_ssl_obj_static PRIVATE OPENSSL=1 PAHO_MQTT_STATIC=1)
