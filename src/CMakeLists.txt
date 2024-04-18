@@ -196,18 +196,18 @@ INSTALL(FILES MQTTAsync.h MQTTClient.h MQTTClientPersistence.h MQTTProperties.h 
 IF (PAHO_WITH_SSL OR PAHO_WITH_LIBRESSL)
     
     IF (PAHO_WITH_LIBRESSL)
-        SET(OPENSSL_ROOT_DIR "" CACHE PATH "Directory containing LibreSSL libraries and includes")
+        SET(LIBRESSL_ROOT_DIR "" CACHE PATH "Directory containing LibreSSL libraries and includes")
         find_package(LibreSSL REQUIRED)
         SET(SSL_INCLUDE_DIR ${LIBRESSL_INCLUDE_DIR} CACHE PATH "Directory containing SSL includes")
         SET(SSL_LIBRARY_NAME LibreSSL CACHE STRING "Name of the used SSL library")
+        message("Use ${SSL_LIBRARY_NAME} at ${LIBRESSL_ROOT_DIR} with SSL_INCLUDE_DIR=${SSL_INCLUDE_DIR}")
     ELSE()
-        SET(LIBRESSL_ROOT_DIR "" CACHE PATH "Directory containing OpenSSL libraries and includes")
+        SET(OPENSSL_ROOT_DIR "" CACHE PATH "Directory containing OpenSSL libraries and includes")
         find_package(OpenSSL REQUIRED)
         SET(SSL_INCLUDE_DIR ${OPENSSL_INCLUDE_DIR} CACHE PATH "Directory containing SSL includes")
         SET(SSL_LIBRARY_NAME OpenSSL CACHE STRING "Name of the used SSL library")
+        message("Use ${SSL_LIBRARY_NAME} at ${OPENSSL_ROOT_DIR} with SSL_INCLUDE_DIR=${SSL_INCLUDE_DIR}")
     ENDIF()
-    message("Use ${SSL_LIBRARY_NAME} at ${LIBRESSL_ROOT_DIR}")
-    message("SSL_INCLUDE_DIR: ${SSL_INCLUDE_DIR} ${LIBRESSL_SSL_LIBRARY} ${LIBRESSL_CRYPTO_LIBRARY}")
     
 
     IF (PAHO_BUILD_SHARED)
