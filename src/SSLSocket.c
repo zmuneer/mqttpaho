@@ -170,7 +170,7 @@ static int SSLSocket_certificate_verify_cb(int preverify_ok, X509_STORE_CTX *x50
             goto exit;
         }
 
-        if (opts->publicKey == NULL || strlen(opts->publicKey) <= 0 || access(opts->publicKey, R_OK) != 0)
+        if (opts->publicKey == NULL || strlen(opts->publicKey) <= 0 )
         {
             Log(TRACE_MIN, -1, "Error opts pubKey invalid");
             goto exit;
