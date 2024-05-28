@@ -701,8 +701,7 @@ char *WebSocket_getdata(networkHandles *net, size_t bytes, size_t* actual_len)
 		/* no current frame, so let's go receive one for the network */
 		if ( !frame )
 		{
-			const int rc =
-				WebSocket_receiveFrame( net, actual_len );
+			rc = WebSocket_receiveFrame( net, actual_len );
 
 			if ( rc == TCPSOCKET_COMPLETE && in_frames && in_frames->first)
 				frame = in_frames->first->content;
@@ -715,7 +714,7 @@ char *WebSocket_getdata(networkHandles *net, size_t bytes, size_t* actual_len)
 
 
 			while (*actual_len < bytes) {
-				const int rc = WebSocket_receiveFrame(net, actual_len);
+				rc = WebSocket_receiveFrame(net, actual_len);
 
 				if (rc != TCPSOCKET_COMPLETE) {
 					goto exit;
