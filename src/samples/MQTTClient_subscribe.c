@@ -18,11 +18,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "MQTTClient.h"
-
-#define ADDRESS     "tcp://mqtt.eclipseprojects.io:1883"
-#define CLIENTID    "ExampleClientSub"
-#define TOPIC       "MQTT Examples"
-#define PAYLOAD     "Hello World!"
+#include <fcntl.h>
+#include <unistd.h>
+#define ADDRESS     "tcp://dev.rightech.io:1883"
+#define CLIENTID    "mqtt-siri-k"
+#define TOPIC       "base/relay/led1"
+#define PAYLOAD     ""
 #define QOS         1
 #define TIMEOUT     10000L
 
@@ -36,9 +37,24 @@ void delivered(void *context, MQTTClient_deliveryToken dt)
 
 int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *message)
 {
+    char msg = *((char*)message->payload);
     printf("Message arrived\n");
     printf("     topic: %s\n", topicName);
     printf("   message: %.*s\n", message->payloadlen, (char*)message->payload);
+    printf("led is on : %.*s \n",message->payloadlen,(char*)message->payload );
+    printf("msg=%c \n",msg);
+
+    int fd;
+    if (msg == 'O')
+    {
+    	fd = open("/sys/class/leds/user/brightness", O_WRONLY);
+        write (fd,"1",1);
+    }
+    else
+    {
+	    write(fd,"0",1);
+    }
+	    close(fd);
     MQTTClient_freeMessage(&message);
     MQTTClient_free(topicName);
     return 1;
