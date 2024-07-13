@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 IBM Corp. and others
+ * Copyright (c) 2017, 2024 IBM Corp. and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
@@ -475,10 +475,10 @@ int MQTTProperties_propertyCount(MQTTProperties *props, enum MQTTPropertyCodes p
 }
 
 
-int MQTTProperties_getNumericValueAt(MQTTProperties *props, enum MQTTPropertyCodes propid, int index)
+int64_t MQTTProperties_getNumericValueAt(MQTTProperties *props, enum MQTTPropertyCodes propid, int index)
 {
 	int i = 0;
-	int rc = -9999999;
+	int64_t rc = -9999999;
 	int cur_index = 0;
 
 	for (i = 0; i < props->count; ++i)
@@ -515,7 +515,7 @@ int MQTTProperties_getNumericValueAt(MQTTProperties *props, enum MQTTPropertyCod
 }
 
 
-int MQTTProperties_getNumericValue(MQTTProperties *props, enum MQTTPropertyCodes propid)
+int64_t MQTTProperties_getNumericValue(MQTTProperties *props, enum MQTTPropertyCodes propid)
 {
 	return MQTTProperties_getNumericValueAt(props, propid, 0);
 }

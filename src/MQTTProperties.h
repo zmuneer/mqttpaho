@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 IBM Corp. and others
+ * Copyright (c) 2017, 2024 IBM Corp. and others
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v2.0
@@ -18,6 +18,8 @@
 #define MQTTPROPERTIES_H
 
 #include "MQTTExportDeclarations.h"
+
+#include <stdint.h>
 
 #define MQTT_INVALID_PROPERTY_ID -2
 
@@ -188,7 +190,7 @@ LIBMQTT_API int MQTTProperties_propertyCount(MQTTProperties *props, enum MQTTPro
  * @param propid the property id to check for.
  * @return the integer value of the property. -9999999 on failure.
  */
-LIBMQTT_API int MQTTProperties_getNumericValue(MQTTProperties *props, enum MQTTPropertyCodes propid);
+LIBMQTT_API int64_t MQTTProperties_getNumericValue(MQTTProperties *props, enum MQTTPropertyCodes propid);
 
 /**
  * Returns the integer value of a specific property when it's not the only instance.
@@ -198,7 +200,7 @@ LIBMQTT_API int MQTTProperties_getNumericValue(MQTTProperties *props, enum MQTTP
  * @param index the instance number, starting at 0.
  * @return the integer value of the property. -9999999 on failure.
  */
-LIBMQTT_API int MQTTProperties_getNumericValueAt(MQTTProperties *props, enum MQTTPropertyCodes propid, int index);
+LIBMQTT_API int64_t MQTTProperties_getNumericValueAt(MQTTProperties *props, enum MQTTPropertyCodes propid, int index);
 
 /**
  * Returns a pointer to the property structure for a specific property.
