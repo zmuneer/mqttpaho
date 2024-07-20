@@ -2340,6 +2340,11 @@ thread_return_type WINAPI MQTTAsync_receiveThread(void* n)
 					m->c->connected = 0; /* don't send disconnect packet back */
 					nextOrClose(m, discrc, "Received disconnect");
 				}
+				else
+				{
+					free(pack);
+					pack = NULL;
+				}
 			}
 		}
 	}
