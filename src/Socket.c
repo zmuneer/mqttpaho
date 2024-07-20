@@ -1062,7 +1062,7 @@ int Socket_new(const char* addr, size_t addr_len, int port, SOCKET* sock)
 #endif
 	int rc = SOCKET_ERROR;
 #if defined(_WIN32) || defined(_WIN64)
-	short family;
+	short family = AF_INET;
 #else
 	sa_family_t family = AF_INET;
 #endif
@@ -1198,7 +1198,7 @@ int Socket_new(const char* addr, size_t addr_len, int port, SOCKET* sock)
 				if (rc == EINPROGRESS || rc == EWOULDBLOCK)
 				{
 					SOCKET* pnewSd = (SOCKET*)malloc(sizeof(SOCKET));
-					ListElement* result = NULL;
+					ListElement* listResult = NULL;
 
 					if (!pnewSd)
 					{
@@ -1207,9 +1207,9 @@ int Socket_new(const char* addr, size_t addr_len, int port, SOCKET* sock)
 					}
 					*pnewSd = *sock;
 					Paho_thread_lock_mutex(socket_mutex);
-					result = ListAppend(mod_s.connect_pending, pnewSd, sizeof(SOCKET));
+					listResult = ListAppend(mod_s.connect_pending, pnewSd, sizeof(SOCKET));
 					Paho_thread_unlock_mutex(socket_mutex);
-					if (!result)
+					if (!listResult)
 					{
 						free(pnewSd);
 						rc = PAHO_MEMORY_ERROR;
